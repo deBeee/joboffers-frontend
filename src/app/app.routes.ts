@@ -1,9 +1,11 @@
 import { Routes } from '@angular/router';
 import { LoginPageComponent } from './loginandregister/login.page.component';
-import { RegisterPageComponent } from './register.page.component';
-import { PageNotFoundComponent } from './page-not-found.component';
-import { LayoutComponent } from './layout.component';
-import { DashboardComponent } from './dashboard.component';
+import { RegisterPageComponent } from './loginandregister/register.page.component';
+import { PageNotFoundComponent } from './error/page-not-found.component';
+import { DashboardPageComponent } from './offer/dashboard.page.component';
+import { AddOfferPageComponent } from './offer/add-offer.page.component';
+import { FindOfferPageComponent } from './offer/find-offer.page.component';
+import { authGuard } from './util/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -21,20 +23,20 @@ export const routes: Routes = [
     title: 'Login',
     component: LoginPageComponent,
   },
-  // {
-  //   path: '',
-  //   component: LayoutComponent,
-  //   children: [
-  //     {
-  //       path: 'dashboard',
-  //       component: DashboardComponent,
-  //       //canActivate: [authGuard],
-  //     },
-  //   ],
-  // },
+  {
+    path: 'add',
+    title: 'Add offer',
+    component: AddOfferPageComponent,
+  },
+  {
+    path: 'find',
+    title: 'Find offer',
+    component: FindOfferPageComponent,
+  },
   {
     path: 'dashboard',
-    component: DashboardComponent,
+    component: DashboardPageComponent,
+    canActivate: [authGuard],
   },
   {
     path: '**',

@@ -1,37 +1,36 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { StorageService } from '../util/storage.service';
 import { AuthService } from '../util/auth.service';
-import { NgIf } from '@angular/common';
 
-export type JwtResponseDto = {
+export type RegistrationResultDto = {
+  userId: string;
   username: string;
-  token: string;
+  isCreated: boolean;
 };
 @Component({
-  selector: 'app-login-page',
+  selector: 'app-register-page',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, NgIf],
+  imports: [RouterLink, ReactiveFormsModule],
   template: `
     <section>
-      <div
-        class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
-      >
+      @if (!showSuccessMesssage) {
         <div
-          class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
+          class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
         >
-          @if (!isLoggedIn) {
+          <div
+            class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
+          >
             <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1
                 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white"
               >
-                Sign in to your account
+                Create an account
               </h1>
               <form
-                [formGroup]="loginForm"
+                [formGroup]="registerForm"
                 (ngSubmit)="onSubmit()"
-                class="space-y-4 md:space-y-6 "
+                class="space-y-4 md:space-y-6"
               >
                 <div>
                   <label
@@ -42,8 +41,8 @@ export type JwtResponseDto = {
                   <input
                     type="text"
                     formControlName="username"
-                    id="username"
                     name="username"
+                    id="username"
                     class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="username"
                     required
@@ -57,8 +56,8 @@ export type JwtResponseDto = {
                   >
                   <input
                     type="password"
-                    formControlName="password"
                     name="password"
+                    formControlName="password"
                     id="password"
                     placeholder="••••••••"
                     class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -69,62 +68,89 @@ export type JwtResponseDto = {
                   type="submit"
                   class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                 >
-                  Sign in
+                  Create an account
                 </button>
                 <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Don’t have an account yet?
+                  Already have an account?
                   <a
-                    routerLink="/register"
+                    routerLink="/login"
                     class="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                    >Sign up</a
+                    >Login here</a
                   >
                 </p>
               </form>
             </div>
-          } @else {
-            <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-              <h1
-                class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white"
-              >
-                Already logged in
-              </h1>
-            </div>
-          }
+          </div>
         </div>
-      </div>
+      } @else {
+        <div
+          class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
+        >
+          <div
+            class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
+          >
+            <div
+              class="p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5"
+            >
+              <div
+                class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900 p-2 flex items-center justify-center mx-auto mb-3.5"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="w-8 h-8 text-green-500 dark:text-green-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </div>
+              <p class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
+                Successfully created account.
+              </p>
+              <button
+                (click)="navigateToLoginPage()"
+                class="py-2 px-3 text-sm font-medium text-center text-white rounded-lg bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:focus:ring-primary-900"
+              >
+                Login
+              </button>
+            </div>
+          </div>
+        </div>
+      }
     </section>
   `,
   styles: ``,
 })
-export class LoginPageComponent implements OnInit {
-  isLoggedIn = false;
+export class RegisterPageComponent {
+  showSuccessMesssage = false;
   private formBuilder = inject(NonNullableFormBuilder);
-  private router = inject(Router);
-  private storageService = inject(StorageService);
   private authService = inject(AuthService);
-  loginForm = this.formBuilder.group({
+  private router = inject(Router);
+  registerForm = this.formBuilder.group({
     username: '',
     password: '',
   });
-
-  ngOnInit(): void {
-    if (this.storageService.getToken()) {
-      this.isLoggedIn = true;
-    }
-  }
-  onSubmit(): void {
-    const { username, password } = this.loginForm.getRawValue();
-
-    this.authService.login(username, password).subscribe({
-      next: (response: JwtResponseDto) => {
-        this.storageService.saveToken(response.token);
-        this.storageService.saveUser({ username: response.username });
-        this.isLoggedIn = true;
-        this.router.navigateByUrl('/dashboard');
+  onSubmit() {
+    const { username, password } = this.registerForm.getRawValue();
+    this.authService.register(username, password).subscribe({
+      next: (response) => {
+        if (response.isCreated) {
+          this.showSuccessMesssage = true;
+        }
       },
       error: (err) => {
+        console.log(err);
         alert(err.error.messages);
       },
     });
+  }
+  navigateToLoginPage() {
+    this.showSuccessMesssage = false;
+    this.router.navigateByUrl('/login');
   }
 }
