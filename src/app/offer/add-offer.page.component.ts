@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { JsonPipe, NgIf } from '@angular/common';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { OfferService } from './data-access/offer.service';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { Offer } from './model/Offer';
 import { OfferCardComponent } from './ui/offer-card.component';
 
@@ -136,7 +136,6 @@ export type OfferData = {
 export class AddOfferPageComponent {
   private formBuilder = inject(NonNullableFormBuilder);
   private offerService = inject(OfferService);
-  private router = inject(Router);
 
   offerForm = this.formBuilder.group({
     title: this.formBuilder.control('', [Validators.required]),
