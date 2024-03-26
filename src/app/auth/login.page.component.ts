@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { StorageService } from '../util/storage.service';
-import { AuthService } from '../util/auth.service';
+import { UserStateService } from './user.state.service';
+import { AuthService } from './auth.service';
 import { NgIf } from '@angular/common';
 
 export type JwtResponseDto = {
@@ -64,6 +64,12 @@ export type JwtResponseDto = {
                     class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
                   />
+                  <span
+                    *ngIf="badCredentials"
+                    class="text-xs text-red-600 dark:text-red-500 pt-1"
+                  >
+                    Bad credentials, try again.
+                  </span>
                 </div>
                 <button
                   type="submit"
@@ -98,9 +104,10 @@ export type JwtResponseDto = {
 })
 export class LoginPageComponent implements OnInit {
   isLoggedIn = false;
+  badCredentials = false;
   private formBuilder = inject(NonNullableFormBuilder);
   private router = inject(Router);
-  private storageService = inject(StorageService);
+  private storageService = inject(UserStateService);
   private authService = inject(AuthService);
   loginForm = this.formBuilder.group({
     username: '',
@@ -112,6 +119,7 @@ export class LoginPageComponent implements OnInit {
       this.isLoggedIn = true;
     }
   }
+
   onSubmit(): void {
     const { username, password } = this.loginForm.getRawValue();
 
@@ -122,8 +130,11 @@ export class LoginPageComponent implements OnInit {
         this.isLoggedIn = true;
         this.router.navigateByUrl('/dashboard');
       },
-      error: (err) => {
-        alert(err.error.messages);
+      error: () => {
+        this.badCredentials = true;
+        setTimeout(() => {
+          this.badCredentials = false;
+        }, 2000);
       },
     });
   }

@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CdkCopyToClipboard } from '@angular/cdk/clipboard';
 import { NgClass } from '@angular/common';
 
-import { Offer } from '../model/Offer';
+import { Offer } from '../models/offer';
 
 @Component({
   selector: 'app-offer-card',
@@ -85,6 +85,7 @@ export class OfferCardComponent {
       this.tooltipVisible = false;
     }, 1000);
   }
+
   switchCopiedFlag() {
     this.copiedFlag = true;
     setTimeout(() => {

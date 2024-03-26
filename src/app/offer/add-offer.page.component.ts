@@ -3,7 +3,7 @@ import { JsonPipe, NgIf } from '@angular/common';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { OfferService } from './data-access/offer.service';
 import { RouterLink } from '@angular/router';
-import { Offer } from './model/Offer';
+import { Offer } from './models/offer';
 import { OfferCardComponent } from './ui/offer-card.component';
 
 export type OfferData = {
@@ -146,6 +146,7 @@ export class AddOfferPageComponent {
 
   submitted: boolean = false;
   addedOffer?: Offer;
+
   onSubmit(): void {
     this.submitted = true;
     if (this.offerForm.valid) {

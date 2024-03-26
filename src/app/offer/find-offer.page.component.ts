@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { OfferService } from './data-access/offer.service';
 import { OfferCardComponent } from './ui/offer-card.component';
-import { Offer } from './model/Offer';
+import { Offer } from './models/offer';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
 

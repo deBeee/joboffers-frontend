@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { OfferData } from '../add-offer.page.component';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Offer } from '../model/Offer';
+import { Offer } from '../models/offer';
 
 export interface OfferListResponse {
   offers: Offer[];

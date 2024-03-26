@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 
-import { Offer } from '../model/Offer';
+import { Offer } from '../models/offer';
 
 const initialState = [] as Offer[];
 

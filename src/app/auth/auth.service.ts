@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { JwtResponseDto } from '../loginandregister/login.page.component';
+import { JwtResponseDto } from './login.page.component';
 import { Observable } from 'rxjs';
-import { RegistrationResultDto } from '../loginandregister/register.page.component';
+import { RegistrationResultDto } from './register.page.component';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -15,6 +15,7 @@ export class AuthService {
   private URL = 'http://localhost:8080';
 
   private http = inject(HttpClient);
+
   login(username: string, password: string): Observable<JwtResponseDto> {
     return this.http.post<JwtResponseDto>(
       `${this.URL}/token`,

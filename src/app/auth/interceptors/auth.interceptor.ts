@@ -1,9 +1,9 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { StorageService } from '../storage.service';
+import { UserStateService } from '../user.state.service';
 
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
-  const storageService = inject(StorageService);
+  const storageService = inject(UserStateService);
 
   if (
     req.url === 'http://localhost:8080/token' ||
@@ -11,6 +11,7 @@ export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   ) {
     return next(req);
   }
+
   const token = storageService.getToken();
 
   const clonedRequest = req.clone({

@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { AuthService } from '../util/auth.service';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from './auth.service';
+import { NgIf } from '@angular/common';
 
 export type RegistrationResultDto = {
   userId: string;
@@ -11,7 +12,7 @@ export type RegistrationResultDto = {
 @Component({
   selector: 'app-register-page',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [RouterLink, ReactiveFormsModule, NgIf],
   template: `
     <section>
       @if (!showSuccessMesssage) {
@@ -47,6 +48,14 @@ export type RegistrationResultDto = {
                     placeholder="username"
                     required
                   />
+                  <span
+                    class="mt-2 text-xs text-red-600 dark:text-red-500"
+                    *ngIf="
+                      submitted && registerForm.controls.username.errors?.['required']
+                    "
+                  >
+                    required
+                  </span>
                 </div>
                 <div>
                   <label
@@ -63,6 +72,14 @@ export type RegistrationResultDto = {
                     class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     required
                   />
+                  <span
+                    class="mt-2 text-xs text-red-600 dark:text-red-500"
+                    *ngIf="
+                      submitted && registerForm.controls.password.errors?.['required']
+                    "
+                  >
+                    required
+                  </span>
                 </div>
                 <button
                   type="submit"
@@ -131,24 +148,32 @@ export class RegisterPageComponent {
   private formBuilder = inject(NonNullableFormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+
   registerForm = this.formBuilder.group({
-    username: '',
-    password: '',
+    username: this.formBuilder.control('', [Validators.required]),
+    password: this.formBuilder.control('', [Validators.required]),
   });
+
+  submitted: boolean = false;
+
   onSubmit() {
-    const { username, password } = this.registerForm.getRawValue();
-    this.authService.register(username, password).subscribe({
-      next: (response) => {
-        if (response.isCreated) {
-          this.showSuccessMesssage = true;
-        }
-      },
-      error: (err) => {
-        console.log(err);
-        alert(err.error.messages);
-      },
-    });
+    this.submitted = true;
+    if (this.registerForm.valid) {
+      const { username, password } = this.registerForm.getRawValue();
+      this.authService.register(username, password).subscribe({
+        next: (response) => {
+          if (response.isCreated) {
+            this.showSuccessMesssage = true;
+          }
+        },
+        error: (err) => {
+          console.log(err);
+          alert(err.error.messages);
+        },
+      });
+    }
   }
+
   navigateToLoginPage() {
     this.showSuccessMesssage = false;
     this.router.navigateByUrl('/login');

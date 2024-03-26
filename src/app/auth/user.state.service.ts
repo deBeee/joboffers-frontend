@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
-import { User } from '../app.component';
+
+import { User } from './models/user';
 
 const TOKEN_KEY = 'auth-token';
 const USER_KEY = 'auth-user';
@@ -7,7 +8,7 @@ const USER_KEY = 'auth-user';
 @Injectable({
   providedIn: 'root',
 })
-export class StorageService {
+export class UserStateService {
   private loggedState = signal<boolean>(this.isLoggedIn());
 
   $loggedStateValue = this.loggedState.asReadonly();

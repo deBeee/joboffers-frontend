@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { CdkCopyToClipboard } from '@angular/cdk/clipboard';
 import { OfferCardComponent } from './ui/offer-card.component';
-import { StorageService } from '../util/storage.service';
+import { UserStateService } from '../auth/user.state.service';
 import { OfferService } from './data-access/offer.service';
 import { RouterLink } from '@angular/router';
 import { OffersStateService } from './data-access/offers.state.service';
@@ -81,7 +81,7 @@ import { OffersStateService } from './data-access/offers.state.service';
   styles: ``,
 })
 export class DashboardPageComponent implements OnInit {
-  private storageService = inject(StorageService);
+  private storageService = inject(UserStateService);
   private offerService = inject(OfferService);
   private offersStateService = inject(OffersStateService);
 

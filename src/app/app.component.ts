@@ -1,10 +1,8 @@
 import { Component, effect, HostBinding, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { NgIf } from '@angular/common';
-import { StorageService } from './util/storage.service';
-export type User = {
-  username: string;
-};
+import { UserStateService } from './auth/user.state.service';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -70,7 +68,7 @@ export type User = {
 })
 export class AppComponent implements OnInit {
   username?: string;
-  private storageService = inject(StorageService);
+  private storageService = inject(UserStateService);
   private router = inject(Router);
 
   isLoggedIn = this.storageService.$loggedStateValue;
@@ -86,10 +84,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.isLoggedIn()) {
-      const user = this.storageService.getUser();
-
-      this.username = user!.username;
+    const user = this.storageService.getUser();
+    if (user) {
+      this.username = user.username;
     }
   }
 
