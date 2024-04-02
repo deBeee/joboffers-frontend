@@ -12,7 +12,7 @@ export interface OfferListResponse {
   providedIn: 'root',
 })
 export class OfferApiService {
-  private URL = 'http://localhost:8080/offers';
+  private URL = '/api/offers';
   private http = inject(HttpClient);
 
   getAll(): Observable<OfferListResponse> {

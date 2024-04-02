@@ -5,10 +5,7 @@ import { UserStateService } from '../user.state.service';
 export const AuthInterceptor: HttpInterceptorFn = (req, next) => {
   const storageService = inject(UserStateService);
 
-  if (
-    req.url === 'http://localhost:8080/token' ||
-    req.url === 'http://localhost:8080/register'
-  ) {
+  if (req.url === '/api/token' || req.url === '/api/register') {
     return next(req);
   }
 

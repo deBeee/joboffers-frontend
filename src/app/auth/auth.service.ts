@@ -12,7 +12,8 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class AuthService {
-  private URL = 'http://localhost:8080';
+  // private URL = 'http://localhost:8080';
+  private URL = '/api';
 
   private http = inject(HttpClient);
 
