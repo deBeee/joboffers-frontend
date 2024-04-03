@@ -9,6 +9,7 @@ const initialState = [] as Offer[];
 })
 export class OffersStateService {
   private state = signal(initialState);
+
   $offersStateValue = this.state.asReadonly();
 
   setState(offers: Offer[]) {
